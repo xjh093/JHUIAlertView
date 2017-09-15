@@ -70,3 +70,8 @@ config.buttons = @[btnconfig1,btnconfig2];
 JHUIAlertView *alert = [[JHUIAlertView alloc] initWithConfig:config];
 [self.view addSubview:alert];
 ```
+
+```
+like this:
+```
+![image](https://github.com/xjh093/JHUIAlertView/blob/master/Screen%20Shot%202017-09-15%20at%2011.16.20.png)

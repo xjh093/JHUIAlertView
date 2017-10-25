@@ -82,27 +82,36 @@
             W -= 2*X;
         }
         
+        //内容
+        UILabel *label = [self xx_setup_label:CGRectZero title:_config.content color:_config.contentColor font:_config.contentFont];
+        
+        //
+        NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:_config.content];
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle setLineSpacing:6];
+        paragraphStyle.alignment = NSTextAlignmentCenter;//居中
+        if ([_config.content containsString:@"\n"]) {
+            paragraphStyle.alignment = NSTextAlignmentLeft;//居左
+        }
+        [attStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [label.text length])];
+        label.attributedText = attStr;
+        
+        //
         CGSize size = CGSizeMake(W, MAXFLOAT);
         UIFont *font = [UIFont systemFontOfSize:16];
         if (_config.contentFont) {
             font = _config.contentFont;
         }
-        size = [_config.content boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin |NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:font} context:nil].size;
+        NSDictionary *dic = @{NSFontAttributeName:font,
+                              NSParagraphStyleAttributeName:paragraphStyle};
+        size = [_config.content boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin |NSStringDrawingUsesFontLeading attributes:dic context:nil].size;
         CGFloat height = size.height;
-        H = height * 2;
+        H = height + 30;
         if (H < 60) {
             H = 60;
         }
-        sframe = CGRectMake(X,Y,W,H);
-        UILabel *label = [self xx_setup_label:sframe title:_config.content color:_config.contentColor font:_config.contentFont];
-        
-        NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:label.text];
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        [paragraphStyle setLineSpacing:6];
-        paragraphStyle.alignment = NSTextAlignmentCenter;//居中
-        [attStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [label.text length])];
-        label.attributedText = attStr;
 
+        label.frame = CGRectMake(X, Y, W, H);
         [contentView addSubview:label];
         Y += H;
     }

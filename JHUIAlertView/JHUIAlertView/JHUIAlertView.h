@@ -12,6 +12,24 @@
 
 @interface JHUIAlertView : UIView
 
++ (void)jh_show_title:(NSString *)title
+              message:(NSString *)message
+               inView:(UIView *)view;
+
++ (void)jh_show_title:(NSString *)title
+              message:(NSString *)message
+               inView:(UIView *)view
+          buttonTitle:(NSString *)buttonTitle
+             andBlock:(dispatch_block_t)block;
+
++ (void)jh_show_title:(NSString *)title
+              message:(NSString *)message
+               inView:(UIView *)view
+          buttonTitle:(NSString *)buttonTitle
+             andBlock:(dispatch_block_t)block
+         buttonTitle2:(NSString *)buttonTitle2
+            andBlock2:(dispatch_block_t)block2;
+
 - (instancetype)initWithConfig:(JHUIAlertConfig *)config;
 
 @end

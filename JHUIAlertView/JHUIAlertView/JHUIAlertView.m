@@ -14,6 +14,59 @@
 
 @implementation JHUIAlertView
 
++ (void)jh_show_title:(NSString *)title
+              message:(NSString *)message
+               inView:(UIView *)view{
+    JHUIAlertConfig *config = [[JHUIAlertConfig alloc] init];
+    config.title            = title;
+    config.content          = message;
+    JHUIAlertView *alert    = [[JHUIAlertView alloc] initWithConfig:config];
+    [view addSubview:alert];
+}
+
++ (void)jh_show_title:(NSString *)title
+              message:(NSString *)message
+               inView:(UIView *)view
+          buttonTitle:(NSString *)buttonTitle
+             andBlock:(dispatch_block_t)block{
+    JHUIAlertConfig *config = [[JHUIAlertConfig alloc] init];
+    config.title            = title;
+    config.content          = message;
+    JHUIAlertButtonConfig *btnconfig1 = [JHUIAlertButtonConfig configWithTitle:buttonTitle color:nil font:nil image:nil handle:^{
+        if (block) {
+            block();
+        }
+    }];
+    config.buttons = @[btnconfig1];
+    JHUIAlertView *alert    = [[JHUIAlertView alloc] initWithConfig:config];
+    [view addSubview:alert];
+}
+
++ (void)jh_show_title:(NSString *)title
+              message:(NSString *)message
+               inView:(UIView *)view
+          buttonTitle:(NSString *)buttonTitle
+             andBlock:(dispatch_block_t)block
+         buttonTitle2:(NSString *)buttonTitle2
+            andBlock2:(dispatch_block_t)block2{
+    JHUIAlertConfig *config = [[JHUIAlertConfig alloc] init];
+    config.title            = title;
+    config.content          = message;
+    JHUIAlertButtonConfig *btnconfig1 = [JHUIAlertButtonConfig configWithTitle:buttonTitle color:nil font:nil image:nil handle:^{
+        if (block) {
+            block();
+        }
+    }];
+    JHUIAlertButtonConfig *btnconfig2 = [JHUIAlertButtonConfig configWithTitle:buttonTitle2 color:nil font:nil image:nil handle:^{
+        if (block2) {
+            block2();
+        }
+    }];
+    config.buttons = @[btnconfig1,btnconfig2];
+    JHUIAlertView *alert    = [[JHUIAlertView alloc] initWithConfig:config];
+    [view addSubview:alert];
+}
+
 - (instancetype)initWithConfig:(JHUIAlertConfig *)config{
     return [self initWithFrame:CGRectZero config:config];
 }

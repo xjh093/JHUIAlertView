@@ -374,8 +374,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.haocold.JHUIAlertView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "25432c3a-50a6-4825-ad01-ffd4c6016d73";
-				PROVISIONING_PROFILE_SPECIFIER = HaoCold_dev;
+				PROVISIONING_PROFILE = "c7b5334a-c91c-41b0-ae32-f384e7cc2c90";
+				PROVISIONING_PROFILE_SPECIFIER = haocold_dev;
 			};
 			name = Debug;
 		};
@@ -389,8 +389,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.haocold.JHUIAlertView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "25432c3a-50a6-4825-ad01-ffd4c6016d73";
-				PROVISIONING_PROFILE_SPECIFIER = HaoCold_dev;
+				PROVISIONING_PROFILE = "c7b5334a-c91c-41b0-ae32-f384e7cc2c90";
+				PROVISIONING_PROFILE_SPECIFIER = haocold_dev;
 			};
 			name = Release;
 		};
@@ -437,6 +437,7 @@
 				08AE3CA71F6247A000FC1381 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		08AE3CA81F6247A000FC1381 /* Build configuration list for PBXNativeTarget "JHUIAlertViewTests" */ = {
 			isa = XCConfigurationList;
@@ -445,6 +446,7 @@
 				08AE3CAA1F6247A000FC1381 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

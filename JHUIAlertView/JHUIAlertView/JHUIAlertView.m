@@ -5,6 +5,27 @@
 //  Created by HaoCold on 2017/8/26.
 //  Copyright © 2017年 HaoCold. All rights reserved.
 //
+//  MIT License
+//
+//  Copyright (c) 2017 xjh093
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
 
 #import "JHUIAlertView.h"
 
@@ -13,6 +34,59 @@
 @end
 
 @implementation JHUIAlertView
+
++ (void)jh_show_title:(NSString *)title
+              message:(NSString *)message
+               inView:(UIView *)view{
+    JHUIAlertConfig *config = [[JHUIAlertConfig alloc] init];
+    config.title            = title;
+    config.content          = message;
+    JHUIAlertView *alert    = [[JHUIAlertView alloc] initWithConfig:config];
+    [view addSubview:alert];
+}
+
++ (void)jh_show_title:(NSString *)title
+              message:(NSString *)message
+               inView:(UIView *)view
+          buttonTitle:(NSString *)buttonTitle
+             andBlock:(dispatch_block_t)block{
+    JHUIAlertConfig *config = [[JHUIAlertConfig alloc] init];
+    config.title            = title;
+    config.content          = message;
+    JHUIAlertButtonConfig *btnconfig1 = [JHUIAlertButtonConfig configWithTitle:buttonTitle color:nil font:nil image:nil handle:^{
+        if (block) {
+            block();
+        }
+    }];
+    config.buttons = @[btnconfig1];
+    JHUIAlertView *alert    = [[JHUIAlertView alloc] initWithConfig:config];
+    [view addSubview:alert];
+}
+
++ (void)jh_show_title:(NSString *)title
+              message:(NSString *)message
+               inView:(UIView *)view
+          buttonTitle:(NSString *)buttonTitle
+             andBlock:(dispatch_block_t)block
+         buttonTitle2:(NSString *)buttonTitle2
+            andBlock2:(dispatch_block_t)block2{
+    JHUIAlertConfig *config = [[JHUIAlertConfig alloc] init];
+    config.title            = title;
+    config.content          = message;
+    JHUIAlertButtonConfig *btnconfig1 = [JHUIAlertButtonConfig configWithTitle:buttonTitle color:nil font:nil image:nil handle:^{
+        if (block) {
+            block();
+        }
+    }];
+    JHUIAlertButtonConfig *btnconfig2 = [JHUIAlertButtonConfig configWithTitle:buttonTitle2 color:nil font:nil image:nil handle:^{
+        if (block2) {
+            block2();
+        }
+    }];
+    config.buttons = @[btnconfig1,btnconfig2];
+    JHUIAlertView *alert    = [[JHUIAlertView alloc] initWithConfig:config];
+    [view addSubview:alert];
+}
 
 - (instancetype)initWithConfig:(JHUIAlertConfig *)config{
     return [self initWithFrame:CGRectZero config:config];
@@ -67,7 +141,7 @@
     if (_config.content.length > 0) {
         
         //分割线
-        if (_config.title.length > 0) {
+        if (_config.title.length > 0 && _config.titleBottomLineHidden == NO) {
             X= 0,W = (CGRectGetWidth(frame) - 100),H=0.5;
             sframe = CGRectMake(X,Y,W,H);
             
@@ -240,6 +314,7 @@
     if (self) {
         _blackViewAlpha = 0.5;
         _contentLeftMargin = 20;
+        _titleBottomLineHidden = NO;
     }
     return self;
 }

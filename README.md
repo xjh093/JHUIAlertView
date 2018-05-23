@@ -20,6 +20,8 @@
 @property (strong,  nonatomic) UIColor          *titleColor;
 ///标题字体,默认18
 @property (strong,  nonatomic) UIFont           *titleFont;
+///隐藏标题下面的分隔线, default is NO.
+@property (assign,  nonatomic) BOOL              titleBottomLineHidden;
 ///内容
 @property (copy,    nonatomic) NSString         *content;
 ///内容颜色
@@ -32,6 +34,10 @@
 @property (strong,  nonatomic) NSArray<JHUIAlertButtonConfig *> *buttons;
 ///黑底透明度，0~0.8
 @property (assign,  nonatomic) CGFloat           blackViewAlpha;
+///弹出动画, 默认是 YES
+@property (nonatomic,  assign) BOOL              showAnimated;
+///弹出动画, 默认是 0.25
+@property (nonatomic,  assign) CGFloat           showAnimateDuration;
 @end
 
 @interface JHUIAlertButtonConfig : NSObject

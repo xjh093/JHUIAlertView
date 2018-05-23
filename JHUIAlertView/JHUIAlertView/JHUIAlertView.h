@@ -76,6 +76,10 @@
 @property (strong,  nonatomic) NSArray<JHUIAlertButtonConfig *> *buttons;
 ///黑底透明度，0~0.8
 @property (assign,  nonatomic) CGFloat           blackViewAlpha;
+///弹出动画, 默认是 YES
+@property (nonatomic,  assign) BOOL              showAnimated;
+///弹出动画, 默认是 0.25
+@property (nonatomic,  assign) CGFloat           showAnimateDuration;
 @end
 
 @interface JHUIAlertButtonConfig : NSObject

@@ -314,6 +314,17 @@
     [self removeFromSuperview];
 }
 
+- (void)willMoveToSuperview:(nullable UIView *)newSuperview{
+    if (newSuperview) {
+        self.transform = CGAffineTransformMakeScale(1.2, 1.2);
+        self.alpha = 0;
+        [UIView animateWithDuration:0.25 animations:^{
+            self.transform = CGAffineTransformIdentity;
+            self.alpha = 1;
+        }];
+    }
+}
+
 @end
 
 @implementation JHUIAlertConfig
@@ -324,6 +335,8 @@
         _blackViewAlpha = 0.5;
         _contentLeftMargin = 20;
         _titleBottomLineHidden = NO;
+        _showAnimated = YES;
+        _showAnimateDuration = 0.25;
     }
     return self;
 }

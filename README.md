@@ -1,5 +1,5 @@
 # JHUIAlertView
-a custom alert view
+a custom alert view which can add your custom view.
 
 
 # Example:

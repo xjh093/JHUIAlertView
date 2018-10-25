@@ -29,9 +29,17 @@
 
 #import <UIKit/UIKit.h>
 
-@class JHUIAlertConfig,JHUIAlertButtonConfig;
+@class JHUIAlertView,JHUIAlertConfig,JHUIAlertTextConfig,JHUIAlertButtonConfig;
+
+typedef void(^JHUIAlertViewAddCustomViewBlock)(JHUIAlertView *alertView, CGRect contentViewRect, CGRect titleLabelRect, CGRect contentLabelRect);
 
 @interface JHUIAlertView : UIView
+
+@property (nonatomic,  strong,  readonly) UIView        *contentView;
+@property (nonatomic,  strong,  readonly) UILabel       *titleLabel;
+@property (nonatomic,  strong,  readonly) UILabel       *contentLabel;
+@property (nonatomic,  strong,  readonly) NSArray       *buttonArray;
+@property (nonatomic,  strong,  readonly) UIView        *titleBottomLine;
 
 + (void)jh_show_title:(NSString *)title
               message:(NSString *)message
@@ -53,46 +61,103 @@
 
 - (instancetype)initWithConfig:(JHUIAlertConfig *)config;
 
+/**
+ 
+ @brief Add a custom view in 'JHUIAlertView'.
+ 
+ @note If you want to add a custom view in 'contentView', you should keep enough sapce through use 'topPadding', 'bottomPadding' etc.
+ 
+ @code
+ 
+ JHUIAlertConfig *config    = [[JHUIAlertConfig alloc] init];
+ config.title.text          = @"add custom view";
+ config.title.bottomPadding = 40;  // use this to keep enough height
+ 
+ JHUIAlertView *alertView = [[JHUIAlertView alloc] initWithConfig:config];
+ 
+ [alertView addCustomView:^(JHUIAlertView *alertView, CGRect contentViewRect, CGRect titleLabelRect, CGRect contentLabelRect) {
+ 
+     UILabel *label = [[UILabel alloc] init];
+     label.frame = CGRectMake(0, CGRectGetMaxY(titleLabelRect)+10, contentViewRect.size.width, 20);
+     label.text = @"This is a custom view";
+     label.textColor = [UIColor blackColor];
+     label.font = [UIFont systemFontOfSize:14];
+     label.textAlignment = NSTextAlignmentCenter;
+ 
+     [alertView.contentView addSubview:label];
+ }];
+ 
+ */
+- (void)addCustomView:(JHUIAlertViewAddCustomViewBlock)block;
+
 @end
 
 @interface JHUIAlertConfig : NSObject
-///标题
-@property (copy,    nonatomic) NSString         *title;
-///标题颜色
-@property (strong,  nonatomic) UIColor          *titleColor;
-///标题字体,默认18
-@property (strong,  nonatomic) UIFont           *titleFont;
-///隐藏标题下面的分隔线, default is NO.
+
+/// title
+@property (nonatomic,  strong,  readonly) JHUIAlertTextConfig      *title;
+/// content
+@property (nonatomic,  strong,  readonly) JHUIAlertTextConfig      *content;
+/// the line between title and content, default is NO.
 @property (assign,  nonatomic) BOOL              titleBottomLineHidden;
-///内容
-@property (copy,    nonatomic) NSString         *content;
-///内容颜色
-@property (strong,  nonatomic) UIColor          *contentColor;
-///内容字体,默认16
-@property (strong,  nonatomic) UIFont           *contentFont;
-///内容左边距
-@property (assign,  nonatomic) CGFloat           contentLeftMargin;
-///按钮
+/// buttons
 @property (strong,  nonatomic) NSArray<JHUIAlertButtonConfig *> *buttons;
-///黑底透明度，0~0.8
+/// the alpha of black mask view, default is 0.5
 @property (assign,  nonatomic) CGFloat           blackViewAlpha;
-///弹出动画, 默认是 YES
-@property (nonatomic,  assign) BOOL              showAnimated;
-///弹出动画, 默认是 0.25
-@property (nonatomic,  assign) CGFloat           showAnimateDuration;
+/// show animation, default is YES
+@property (nonatomic,  assign) BOOL              showAnimation;
+/// show animation duration, default is 0.25s
+@property (nonatomic,  assign) CGFloat           showAnimationDuration;
+/// Default is: [UIScreen mainScreen].bounds.size.width - 100
+@property (nonatomic,  assign) CGFloat           contentViewWidth;
+/// Height for a fully custom view
+@property (nonatomic,  assign) CGFloat           contentViewHeight;
+/// Default is 10
+@property (nonatomic,  assign) CGFloat           contentViewCornerRadius;
+/// Default is YES
+@property (nonatomic,  assign) BOOL              dismissWhenTapOut;
+/// Button height
+@property (nonatomic,  assign) CGFloat           buttonHeight;
+
+@end
+
+@interface JHUIAlertTextConfig : NSObject
+
+/// text
+@property (copy,    nonatomic) NSString         *text;
+/// text color
+@property (strong,  nonatomic) UIColor          *color;
+/// text font, default is 18
+@property (strong,  nonatomic) UIFont           *font;
+/// top padding
+@property (nonatomic,  assign) CGFloat           topPadding;
+/// left padding
+@property (nonatomic,  assign) CGFloat           leftPadding;
+/// bottom padding
+@property (nonatomic,  assign) CGFloat           bottomPadding;
+/// right padding
+@property (nonatomic,  assign) CGFloat           rightPadding;
+/// auto height
+@property (nonatomic,  assign) BOOL              autoHeight;
+/// line space
+@property (nonatomic,  assign) CGFloat           lineSpace;
+
 @end
 
 @interface JHUIAlertButtonConfig : NSObject
-///标题
+/// title
 @property (copy,    nonatomic) NSString         *title;
-///标题颜色
-@property (strong,  nonatomic) UIColor          *titleColor;
-///标题字体,默认18
-@property (strong,  nonatomic) UIFont           *titleFont;
-///图片
+/// title color
+@property (strong,  nonatomic) UIColor          *color;
+/// title font, default is 18
+@property (strong,  nonatomic) UIFont           *font;
+/// image
 @property (strong,  nonatomic) UIImage          *image;
-///回调
+/// the space between image and title
+@property (nonatomic,  assign) CGFloat           imageTitleSpace;
+/// block
 @property (copy,    nonatomic) dispatch_block_t  block;
 
 + (JHUIAlertButtonConfig *)configWithTitle:(NSString *)title color:(UIColor *)color font:(UIFont *)font image:(UIImage *)image handle:(dispatch_block_t)block;
+
 @end

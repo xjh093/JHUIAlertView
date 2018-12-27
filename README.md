@@ -4,6 +4,17 @@ a custom alert view which can add your custom view.
 
 ---
 
+# Version
+Latest release version:
+- [1.1.0](https://github.com/xjh093/JHUIAlertView/releases)
+
+---
+
+# Cocoapods
+`pod "JHUIAlertView"`
+
+---
+
 # What
 ![image](https://github.com/xjh093/JHUIAlertView/blob/master/Screen%20Shot%202017-09-15%20at%2011.16.20.png)
 

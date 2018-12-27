@@ -42,6 +42,6 @@ JHUIAlertView *alert = [[JHUIAlertView alloc] initWithConfig:config];
 
 ---
 
-More detail in Demo :)
+# More detail in Demo :)
 
 ---

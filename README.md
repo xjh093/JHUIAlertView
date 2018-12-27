@@ -1,8 +1,15 @@
 # JHUIAlertView
 a custom alert view which can add your custom view.
+- 自定义的alert,可添加自定义视图
 
+---
 
-# Example:
+# What
+![image](https://github.com/xjh093/JHUIAlertView/blob/master/Screen%20Shot%202017-09-15%20at%2011.16.20.png)
+
+---
+
+# Usage
 ```
 JHUIAlertConfig *config = [[JHUIAlertConfig alloc] init];
 config.title            = @"这是一个提示";
@@ -21,8 +28,3 @@ config.buttons = @[btnconfig1,btnconfig2];
 JHUIAlertView *alert = [[JHUIAlertView alloc] initWithConfig:config];
 [self.view addSubview:alert];
 ```
-
-```
-like this:
-```
-![image](https://github.com/xjh093/JHUIAlertView/blob/master/Screen%20Shot%202017-09-15%20at%2011.16.20.png)

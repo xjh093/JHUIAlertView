@@ -1,63 +1,26 @@
 # JHUIAlertView
+a custom alert view which can add your custom view.
+- 自定义的alert,可添加自定义视图
 
-.h
+---
 
-```
-#import <UIKit/UIKit.h>
+# Version
+Latest release version:
+- [1.1.0](https://github.com/xjh093/JHUIAlertView/releases)
 
-@class JHUIAlertConfig,JHUIAlertButtonConfig;
+---
 
-@interface JHUIAlertView : UIView
+# Cocoapods
+`pod "JHUIAlertView"`
 
-- (instancetype)initWithConfig:(JHUIAlertConfig *)config;
+---
 
-@end
+# What
+![image](https://github.com/xjh093/JHUIAlertView/blob/master/Screen%20Shot%202017-09-15%20at%2011.16.20.png)
 
-@interface JHUIAlertConfig : NSObject
-///标题
-@property (copy,    nonatomic) NSString         *title;
-///标题颜色
-@property (strong,  nonatomic) UIColor          *titleColor;
-///标题字体,默认18
-@property (strong,  nonatomic) UIFont           *titleFont;
-///隐藏标题下面的分隔线, default is NO.
-@property (assign,  nonatomic) BOOL              titleBottomLineHidden;
-///内容
-@property (copy,    nonatomic) NSString         *content;
-///内容颜色
-@property (strong,  nonatomic) UIColor          *contentColor;
-///内容字体,默认16
-@property (strong,  nonatomic) UIFont           *contentFont;
-///内容左边距
-@property (assign,  nonatomic) CGFloat           contentLeftMargin;
-///按钮
-@property (strong,  nonatomic) NSArray<JHUIAlertButtonConfig *> *buttons;
-///黑底透明度，0~0.8
-@property (assign,  nonatomic) CGFloat           blackViewAlpha;
-///弹出动画, 默认是 YES
-@property (nonatomic,  assign) BOOL              showAnimated;
-///弹出动画, 默认是 0.25
-@property (nonatomic,  assign) CGFloat           showAnimateDuration;
-@end
+---
 
-@interface JHUIAlertButtonConfig : NSObject
-///标题
-@property (copy,    nonatomic) NSString         *title;
-///标题颜色
-@property (strong,  nonatomic) UIColor          *titleColor;
-///标题字体,默认18
-@property (strong,  nonatomic) UIFont           *titleFont;
-///图片
-@property (strong,  nonatomic) UIImage          *image;
-///回调
-@property (copy,    nonatomic) dispatch_block_t  block;
-
-+ (JHUIAlertButtonConfig *)configWithTitle:(NSString *)title color:(UIColor *)color font:(UIFont *)font image:(UIImage *)image handle:(dispatch_block_t)block;
-@end
-```
-
-
-使用：& use
+# Usage
 ```
 JHUIAlertConfig *config = [[JHUIAlertConfig alloc] init];
 config.title            = @"这是一个提示";
@@ -77,7 +40,8 @@ JHUIAlertView *alert = [[JHUIAlertView alloc] initWithConfig:config];
 [self.view addSubview:alert];
 ```
 
-```
-like this:
-```
-![image](https://github.com/xjh093/JHUIAlertView/blob/master/Screen%20Shot%202017-09-15%20at%2011.16.20.png)
+---
+
+# More detail in Demo :)
+
+---

@@ -43,7 +43,7 @@
     for (int i = 0; i < titles.count; ++i) {
         
         UIButton *button = [UIButton buttonWithType:0];
-        button.frame = CGRectMake(10, 70+45*i, W-20, 40);
+        button.frame = CGRectMake(10, 70+35*i, W-20, 30);
         button.backgroundColor = [UIColor lightGrayColor];
         [button setTitle:titles[i] forState:0];
         [button setTitleColor:[UIColor blackColor] forState:0];
@@ -206,17 +206,16 @@
         [self.view addSubview:alert];
     }else if (tag == 11){
         JHUIAlertConfig *config = [[JHUIAlertConfig alloc] init];
+        
+#if 0
         config.title.text       = @"添加自定义视图";
         config.title.bottomPadding = 100; // set bottomPadding to keep enough height
         config.dismissWhenTapOut   = NO;
         
+#else
         // when you want a fully custom view, you should use 'contentViewHeight'
-        /*
-         
-         JHUIAlertConfig *config = [[JHUIAlertConfig alloc] init];
-         config.contentViewHeight = 200;
-         
-         */
+        config.contentViewHeight = 200;
+#endif
         
         JHUIAlertView *alertView = [[JHUIAlertView alloc] initWithConfig:config];
         

@@ -274,7 +274,7 @@
         H = Y;
     }
     
-    if (H <= 0) {
+    if (_config.contentViewHeight > 0) {
         H = _config.contentViewHeight;
     }
     
@@ -364,12 +364,16 @@
         btnConfig.block();
     }
     
-    [self removeFromSuperview];
+    [self xx_tap];
 }
 
 - (void)xx_tap
 {
-    [self removeFromSuperview];
+    [UIView animateWithDuration:_config.showAnimationDuration animations:^{
+        self.alpha = 0;
+    } completion:^(BOOL finished) {
+        [self removeFromSuperview];
+    }];
 }
 
 - (void)willMoveToSuperview:(nullable UIView *)newSuperview{

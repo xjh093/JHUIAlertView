@@ -375,7 +375,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.haocold.JHUIAlertView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "c7b5334a-c91c-41b0-ae32-f384e7cc2c90";
-				PROVISIONING_PROFILE_SPECIFIER = haocold_dev;
+				PROVISIONING_PROFILE_SPECIFIER = haocold.develop;
 			};
 			name = Debug;
 		};
@@ -390,7 +390,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.haocold.JHUIAlertView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "c7b5334a-c91c-41b0-ae32-f384e7cc2c90";
-				PROVISIONING_PROFILE_SPECIFIER = haocold_dev;
+				PROVISIONING_PROFILE_SPECIFIER = haocold.develop;
 			};
 			name = Release;
 		};

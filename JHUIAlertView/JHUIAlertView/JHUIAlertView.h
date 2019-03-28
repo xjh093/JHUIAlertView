@@ -41,6 +41,8 @@ typedef void(^JHUIAlertViewAddCustomViewBlock)(JHUIAlertView *alertView, CGRect 
 @property (nonatomic,  strong,  readonly) NSArray       *buttonArray;
 @property (nonatomic,  strong,  readonly) UIView        *titleBottomLine;
 
+@property (nonatomic,    copy) dispatch_block_t tapOutDismissBlock;
+
 + (void)jh_show_title:(NSString *)title
               message:(NSString *)message
                inView:(UIView *)view;
@@ -89,6 +91,9 @@ typedef void(^JHUIAlertViewAddCustomViewBlock)(JHUIAlertView *alertView, CGRect 
  
  */
 - (void)addCustomView:(JHUIAlertViewAddCustomViewBlock)block;
+
+- (void)showInView:(UIView *)view;
+- (void)dismiss;
 
 @end
 

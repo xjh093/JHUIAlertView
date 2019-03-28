@@ -364,32 +364,53 @@
         btnConfig.block();
     }
     
-    [self xx_tap];
+    [self dismiss];
 }
 
 - (void)xx_tap
 {
-    [UIView animateWithDuration:_config.showAnimationDuration animations:^{
-        self.alpha = 0;
-    } completion:^(BOOL finished) {
-        [self removeFromSuperview];
-    }];
+    if (_config.dismissWhenTapOut) {
+        
+        if (_tapOutDismissBlock) {
+            _tapOutDismissBlock();
+        }
+        
+        [self dismiss];
+    }
 }
 
 - (void)willMoveToSuperview:(nullable UIView *)newSuperview{
-    if (newSuperview && _config.showAnimation) {
-        self.transform = CGAffineTransformMakeScale(1.2, 1.2);
-        self.alpha = 0;
-        [UIView animateWithDuration:_config.showAnimationDuration animations:^{
-            self.transform = CGAffineTransformIdentity;
-            self.alpha = 1;
-        }];
+    if (newSuperview) {
+        if (_config.showAnimation) {
+            self.transform = CGAffineTransformMakeScale(1.2, 1.2);
+            self.alpha = 0;
+            [UIView animateWithDuration:_config.showAnimationDuration animations:^{
+                self.transform = CGAffineTransformIdentity;
+                self.alpha = 1;
+            }];
+        }
     }
 }
 
 - (void)addCustomView:(JHUIAlertViewAddCustomViewBlock)block{
     if (block) {
         block(self,_contentView.frame,_titleLabel.frame,_contentLabel.frame);
+    }
+}
+
+- (void)showInView:(UIView *)view{
+    [view addSubview:self];
+}
+
+- (void)dismiss{
+    if (_config.showAnimation) {
+        [UIView animateWithDuration:_config.showAnimationDuration animations:^{
+            self.alpha = 0;
+        } completion:^(BOOL finished) {
+            [self removeFromSuperview];
+        }];
+    }else{
+        [self removeFromSuperview];
     }
 }
 

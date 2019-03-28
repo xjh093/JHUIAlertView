@@ -6,7 +6,7 @@ a custom alert view which can add your custom view.
 
 # Version
 Latest release version:
-- [1.1.1](https://github.com/xjh093/JHUIAlertView/releases)
+- [1.1.2](https://github.com/xjh093/JHUIAlertView/releases)
 
 ---
 

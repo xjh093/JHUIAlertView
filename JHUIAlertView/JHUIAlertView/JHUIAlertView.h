@@ -150,6 +150,7 @@ typedef void(^JHUIAlertViewAddCustomViewBlock)(JHUIAlertView *alertView, CGRect 
 @end
 
 @interface JHUIAlertButtonConfig : NSObject
+
 /// title
 @property (copy,    nonatomic) NSString         *title;
 /// title color

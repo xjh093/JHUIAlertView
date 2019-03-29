@@ -151,6 +151,7 @@
         W = _config.contentViewWidth - X - _config.title.rightPadding;
         
         UILabel *titleLable = [self xx_setup_attributed_label:_config.title.text
+                                                        color:_config.title.color
                                                          font:_config.title.font
                                                         width:W
                                                     lineSpace:_config.title.lineSpace];
@@ -187,6 +188,7 @@
         W = _config.contentViewWidth - X - _config.content.rightPadding;
         
         UILabel *contentLabel = [self xx_setup_attributed_label:_config.content.text
+                                                          color:_config.content.color
                                                            font:_config.content.font
                                                           width:W
                                                       lineSpace:_config.content.lineSpace];
@@ -284,6 +286,7 @@
 }
 
 - (UILabel *)xx_setup_attributed_label:(NSString *)text
+                                 color:(UIColor *)color
                                   font:(UIFont *)font
                                  width:(CGFloat)width
                              lineSpace:(CGFloat)lineSpace
@@ -297,6 +300,8 @@
         paragraphStyle.alignment = NSTextAlignmentLeft; // 居左
     }
     [attStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [text length])];
+    [attStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, [text length])];
+    [attStr addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, [text length])];
     
     // calculate size
     CGSize size = CGSizeMake(width, MAXFLOAT);
@@ -307,7 +312,6 @@
     // label
     UILabel *label = [[UILabel alloc] init];
     label.frame = CGRectMake(0, 0, width, size.height);
-    label.font = font;
     label.attributedText = attStr;
     return label;
 }
@@ -340,21 +344,6 @@
     [button addTarget:self action:@selector(xx_click:) forControlEvents:1<<6];
     [view addSubview:button];
     return button;
-}
-
-- (UILabel *)xx_setup_label:(CGRect)frame
-                      title:(NSString *)title
-                      color:(UIColor *)color
-                       font:(UIFont *)font
-{
-    UILabel *label = [[UILabel alloc] init];
-    label.frame = frame;
-    label.text = title;
-    label.textColor = color==nil?[UIColor blackColor]:color;
-    label.font = font==nil?[UIFont systemFontOfSize:16]:font;
-    label.textAlignment = 1;
-    label.numberOfLines = 0;
-    return label;
 }
 
 - (void)xx_click:(UIButton *)button

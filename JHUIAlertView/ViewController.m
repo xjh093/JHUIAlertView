@@ -231,9 +231,9 @@
         
 #if 1
         config.title.text       = @"添加自定义视图";
-        config.title.bottomPadding = 100; // set bottomPadding to keep enough height
+        config.content.bottomPadding = 100; // set bottomPadding to keep enough height
         config.dismissWhenTapOut   = NO;
-        
+        config.content.text = @"blablabla";
 #else
         // when you want a fully custom view, you should use 'contentViewHeight'
         config.contentViewHeight = 300;
@@ -244,7 +244,7 @@
         [alertView addCustomView:^(JHUIAlertView *alertView, CGRect contentViewRect, CGRect titleLabelRect, CGRect contentLabelRect) {
             
             UILabel *label = [[UILabel alloc] init];
-            label.frame = CGRectMake(10, CGRectGetMaxY(titleLabelRect)+10, contentViewRect.size.width-20, 20);
+            label.frame = CGRectMake(10, CGRectGetMaxY(contentLabelRect)+10, contentViewRect.size.width-20, 20);
             label.text = @"这是一个自定义的标签";
             label.textColor = [UIColor blackColor];
             label.backgroundColor = [UIColor lightGrayColor];

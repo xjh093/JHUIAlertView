@@ -498,7 +498,8 @@
 
 - (void)addCustomView:(JHUIAlertViewAddCustomViewBlock)block{
     if (block) {
-        block(self,_contentView.frame,_titleLabel.frame,_contentLabel.frame);
+        CGRect frame = [_contentLabel.superview convertRect:_contentLabel.frame toView:_contentView];
+        block(self, _contentView.frame, _titleLabel.frame, frame);
     }
 }
 

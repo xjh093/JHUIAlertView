@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name         = 'JHUIAlertView'
   s.summary      = 'A simple custom AlertView.'
-  s.version      = '1.2.0'
+  s.version      = '1.2.1'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.authors      = { 'Haocold' => 'xjh093@126.com' }
   s.homepage     = 'https://github.com/xjh093/JHUIAlertView'

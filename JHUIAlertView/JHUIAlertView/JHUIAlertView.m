@@ -32,6 +32,12 @@
 @interface JHUIAlertView()
 
 @property (strong,  nonatomic) JHUIAlertConfig      *config;
+@property (nonatomic,  assign) NSInteger  rotation;
+@property (nonatomic,  assign) CGFloat  contentViewHeight;
+
+@property (nonatomic,  strong) UIView *titleView;
+@property (nonatomic,  strong) UIView *middleView;
+@property (nonatomic,  strong) UIView *bottomView;
 
 @end
 
@@ -105,6 +111,7 @@
     if (self) {
         _config = config;
         [self jhSetupViews:frame];
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     }
     return self;
 }
@@ -131,6 +138,7 @@
     blackView.backgroundColor = [UIColor blackColor];
     blackView.frame = frame;
     blackView.alpha = _config.blackViewAlpha;
+    blackView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self addSubview:blackView];
     
     //
@@ -140,7 +148,11 @@
     [self addSubview:contentView];
     _contentView = contentView;
     
-    CGFloat X = 0, Y = 0, W = 0, H = 0;
+    UIView *titleView = [[UIView alloc] init];   _titleView = titleView;
+    UIView *middleView = [[UIView alloc] init];  _middleView = middleView;
+    UIView *bottomView = [[UIView alloc] init];  _bottomView = bottomView;
+    
+    CGFloat X = 0, Y = 0, W = 0, H = 0, contentViewH = 0;
     CGRect sframe;
     
     // 标题
@@ -158,16 +170,17 @@
         sframe = titleLable.frame;
         sframe.origin.x = X;
         sframe.origin.y = Y;
-        titleLable.frame = sframe;
-    
-        if (_config.title.autoHeight) {
-            titleLable.numberOfLines = 0;
-        }
         
-        [contentView addSubview:titleLable];
+        titleLable.frame = sframe;
+        titleLable.numberOfLines = _config.title.autoHeight ? 0 : 1;
         _titleLabel = titleLable;
         
-        Y = CGRectGetMaxY(titleLable.frame) + _config.title.bottomPadding;
+        titleView.frame = CGRectMake(0, 0, _config.contentViewWidth, CGRectGetMaxY(titleLable.frame) + _config.title.bottomPadding);
+        
+        [titleView addSubview:titleLable];
+        [contentView addSubview:titleView];
+        
+        contentViewH = CGRectGetMaxY(titleView.frame);
     }
     
     // 内容
@@ -175,16 +188,16 @@
         
         //分割线
         if (_config.title.text.length > 0 && _config.titleBottomLineHidden == NO) {
-            X = 0, W = _config.contentViewWidth, H = 0.5;
-            sframe = CGRectMake(X,Y,W,H);
+            W = _config.contentViewWidth, H = 1.0/[UIScreen mainScreen].scale;
+            sframe = CGRectMake(0,0,W,H);
             
             UIView *line = [self xx_setup_line:sframe];
-            [contentView addSubview:line];
+            [middleView addSubview:line];
             _titleBottomLine = line;
         }
         
         X = _config.content.leftPadding;
-        Y = Y + _config.content.topPadding;
+        Y = _config.content.topPadding;
         W = _config.contentViewWidth - X - _config.content.rightPadding;
         
         UILabel *contentLabel = [self xx_setup_attributed_label:_config.content.text
@@ -195,17 +208,38 @@
         sframe = contentLabel.frame;
         sframe.origin.x = X;
         sframe.origin.y = Y;
+        
+        UIScrollView *scrollView = [[UIScrollView alloc] init];
+        scrollView.frame = sframe;
+        scrollView.backgroundColor = [UIColor whiteColor];
+        scrollView.contentSize = CGSizeMake(0, CGRectGetHeight(sframe));
+        scrollView.showsVerticalScrollIndicator = NO;
+        scrollView.showsHorizontalScrollIndicator = NO;
+        scrollView.pagingEnabled = NO;
+        
+        sframe.origin.x = 0;
+        sframe.origin.y = 0;
         contentLabel.frame = sframe;
-        
-        if (_config.content.autoHeight) {
-            contentLabel.numberOfLines = 0;
-        }
-        
-        [contentView addSubview:contentLabel];
+        contentLabel.numberOfLines = _config.content.autoHeight ? 0 : 1;
         _contentLabel = contentLabel;
         
-        Y = CGRectGetMaxY(contentLabel.frame) + _config.content.bottomPadding;
-
+        CGFloat maxY = CGRectGetMaxY(scrollView.frame) + _config.content.bottomPadding;
+        if (_config.content.maxHeight > 0 && CGRectGetHeight(sframe) > _config.content.maxHeight) {
+            
+            //
+            scrollView.frame = CGRectMake(X, Y, CGRectGetWidth(sframe), _config.content.maxHeight);
+            
+            //
+            maxY = CGRectGetMaxY(scrollView.frame) + _config.content.bottomPadding;
+        }
+        
+        [scrollView addSubview:contentLabel];
+        [middleView addSubview:scrollView];
+        
+        middleView.frame = CGRectMake(0, contentViewH, _config.contentViewWidth, maxY);
+        [contentView addSubview:middleView];
+        
+        contentViewH = CGRectGetMaxY(middleView.frame);
     }
     
     CGFloat buttonH = _config.buttonHeight;
@@ -214,34 +248,40 @@
         
         // 分割线 横
         if (_config.title.text.length > 0 || _config.content.text.length > 0) {
-            X= 0, W = _config.contentViewWidth, H = 0.5;
-            sframe = CGRectMake(X,Y,W,H);
+            W = _config.contentViewWidth, H = 1.0/[UIScreen mainScreen].scale;
+            sframe = CGRectMake(0,0,W,H);
             
             UIView *line = [self xx_setup_line:sframe];
-            [contentView addSubview:line];
+            [bottomView addSubview:line];
         }
         
         // 分割线 竖
-        X = _config.contentViewWidth*0.5, W = 0.5, H = buttonH;
-        sframe = CGRectMake(X,Y,W,H);
+        X = _config.contentViewWidth*0.5, W = 1.0/[UIScreen mainScreen].scale, H = buttonH;
+        sframe = CGRectMake(X,0,W,H);
         UIView *line = [self xx_setup_line:sframe];
-        [contentView addSubview:line];
+        [bottomView addSubview:line];
         
         //按钮
         X = 0, W = _config.contentViewWidth*0.5;
         
         for (int i = 0; i < _config.buttons.count; ++i) {
-            sframe = CGRectMake(X,Y,W,H);
+            sframe = CGRectMake(X,0,W,H);
             JHUIAlertButtonConfig *btnConfig = _config.buttons[i];
-            [self xx_setup_button:sframe title:btnConfig.title color:btnConfig.color font:btnConfig.font image:btnConfig.image superview:contentView tag:i];
+            [self xx_setup_button:sframe title:btnConfig.title color:btnConfig.color font:btnConfig.font image:btnConfig.image superview:bottomView tag:i];
             X += W;
         }
-    }else{
-        X= 0, W = (CGRectGetWidth(frame) - 100), H = buttonH;
+        
+        bottomView.frame = CGRectMake(0, contentViewH, _config.contentViewWidth, H);
+        [contentView addSubview:bottomView];
+        
+        contentViewH = CGRectGetMaxY(bottomView.frame);
+        
+    }else if (_config.buttons.count > 0){
+        Y = 0, W = _config.contentViewWidth, H = buttonH;
         for (int i = 0; i < _config.buttons.count; ++i) {
-            sframe = CGRectMake(X,Y,W,H);
+            sframe = CGRectMake(0,Y,W,H);
             JHUIAlertButtonConfig *btnConfig = _config.buttons[i];
-            UIButton *button = [self xx_setup_button:sframe title:btnConfig.title color:btnConfig.color font:btnConfig.font image:btnConfig.image superview:contentView tag:i];
+            UIButton *button = [self xx_setup_button:sframe title:btnConfig.title color:btnConfig.color font:btnConfig.font image:btnConfig.image superview:bottomView tag:i];
             
             // space
             if (btnConfig.imageTitleSpace > 0) {
@@ -254,13 +294,18 @@
                 //no line
             }else{
                 H = 0.5;
-                sframe = CGRectMake(X,Y,W,H);
+                sframe = CGRectMake(0,Y,W,H);
                 UIView *line = [self xx_setup_line:sframe];
-                [contentView addSubview:line];
+                [bottomView addSubview:line];
             }
             H = buttonH;
             Y += H;
         }
+        
+        bottomView.frame = CGRectMake(0, contentViewH, _config.contentViewWidth, _config.buttons.count*H);
+        [contentView addSubview:bottomView];
+        
+        contentViewH = CGRectGetMaxY(bottomView.frame);
     }
     
     if (_config.dismissWhenTapOut) {
@@ -269,20 +314,23 @@
         })];
     }
     
-    X = 50, W = _config.contentViewWidth;
-    if (_config.buttons.count == 2) {
-        H = Y + H;
-    }else{
-        H = Y;
-    }
-    
+    // 完全自定义时
     if (_config.contentViewHeight > 0) {
-        H = _config.contentViewHeight;
+        if (_config.title.text.length == 0 &&
+            _config.content.text.length == 0 &&
+            _config.buttons.count == 0) {
+            contentViewH = _config.contentViewHeight;
+        }
     }
     
-    contentView.frame = CGRectMake(X,Y,W,H);
-    contentView.center = self.center;
+    _contentViewHeight = contentViewH;
     
+    if (_contentViewHeight > [UIScreen mainScreen].bounds.size.height - 100) {
+        _contentViewHeight = [UIScreen mainScreen].bounds.size.height - 100;
+        [self setupMiddleViewHeight:_contentViewHeight];
+    }else{
+        contentView.frame = CGRectMake(0,0,_config.contentViewWidth,_contentViewHeight);
+    }
 }
 
 - (UILabel *)xx_setup_attributed_label:(NSString *)text
@@ -379,6 +427,73 @@
             }];
         }
     }
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    CGFloat W = CGRectGetWidth(self.frame);
+    CGFloat H = CGRectGetHeight(self.frame);
+    CGFloat newH = 0;
+    
+    if (W > H) {
+        if (_rotation == 1) {
+            return;
+        }
+        _rotation = 1;
+        
+        if (CGRectGetHeight(_contentView.frame) > H - 100) {
+            newH = H - 100;
+            [self setupMiddleViewHeight:newH];
+        }
+    }else{
+        
+        // the first time
+        if (_rotation == 0) {
+            _contentView.center = self.center;
+            return;
+        }
+        
+        if (_rotation == 2) {
+            return;
+        }
+        _rotation = 2;
+        
+        newH = _contentViewHeight;
+        [self setupMiddleViewHeight:newH];
+    }
+    
+    _contentView.center = self.center;
+}
+
+- (void)setupMiddleViewHeight:(CGFloat)newH
+{
+    CGRect frame = _middleView.frame;
+    frame.size.height = newH - CGRectGetHeight(_titleView.frame) - CGRectGetHeight(_bottomView.frame);
+    _middleView.frame = frame;
+    
+    for (UIView *view in _middleView.subviews) {
+        if (CGRectGetHeight(view.frame) < 1.0) {
+            continue;
+        }
+        
+        frame = view.frame;
+        frame.size.height = CGRectGetHeight(_middleView.frame) - _config.content.topPadding - _config.content.bottomPadding;
+        view.frame = frame;
+        
+        if ([view isKindOfClass:[UIScrollView class]]) {
+            break;
+        }
+    }
+        
+    frame = _contentView.frame;
+    frame.size.height = newH;
+    _contentView.frame = frame;
+    
+    frame = _bottomView.frame;
+    frame.origin.y = newH - CGRectGetHeight(frame);
+    _bottomView.frame = frame;
 }
 
 - (void)addCustomView:(JHUIAlertViewAddCustomViewBlock)block{

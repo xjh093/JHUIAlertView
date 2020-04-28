@@ -41,6 +41,8 @@ typedef void(^JHUIAlertViewAddCustomViewBlock)(JHUIAlertView *alertView, CGRect 
 @property (nonatomic,  strong,  readonly) NSArray       *buttonArray;
 @property (nonatomic,  strong,  readonly) UIView        *titleBottomLine;
 
+@property (nonatomic,  strong,  readonly) JHUIAlertConfig      *config;
+
 @property (nonatomic,    copy) dispatch_block_t tapOutDismissBlock;
 
 + (void)jh_show_title:(NSString *)title
@@ -146,7 +148,8 @@ typedef void(^JHUIAlertViewAddCustomViewBlock)(JHUIAlertView *alertView, CGRect 
 @property (nonatomic,  assign) BOOL              autoHeight;
 /// line space
 @property (nonatomic,  assign) CGFloat           lineSpace;
-
+/// max height (for content)
+@property (nonatomic,  assign) CGFloat           maxHeight;
 @end
 
 @interface JHUIAlertButtonConfig : NSObject

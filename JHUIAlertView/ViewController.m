@@ -9,8 +9,9 @@
 #import "ViewController.h"
 #import "JHUIAlertView.h"
 
-@interface ViewController ()
-
+@interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
+@property (nonatomic,  strong) UITableView *tableView;
+@property (nonatomic,  strong) NSArray *dataArray;
 @end
 
 @implementation ViewController
@@ -20,14 +21,7 @@
     // Do any additional setup after loading the view, typically from a nib.
     
     self.title = @"JHUIAlertView";
-    
-    [self jhSetupViews];
-    
-}
-
-- (void)jhSetupViews
-{
-    NSArray *titles = @[@"标题",
+    self.dataArray = @[@"标题",
                         @"内容",
                         @"按钮",
                         @"两个按钮",
@@ -38,24 +32,52 @@
                         @"标题+内容+两个按钮",
                         @"标题+内容+三个按钮",
                         @"标题+内容+四个按钮",
-                        @"添加自定义视图"];
-    CGFloat W = self.view.frame.size.width;
-    for (int i = 0; i < titles.count; ++i) {
-        
-        UIButton *button = [UIButton buttonWithType:0];
-        button.frame = CGRectMake(10, 70+35*i, W-20, 30);
-        button.backgroundColor = [UIColor lightGrayColor];
-        [button setTitle:titles[i] forState:0];
-        [button setTitleColor:[UIColor blackColor] forState:0];
-        [button addTarget:self action:@selector(xx_event:) forControlEvents:1<<6];
-        button.tag = i;
-        [self.view addSubview:button];
-    }
+                        @"添加自定义视图",
+                        @"内容限制高度"];
+    
+    [self.view addSubview:self.tableView];
 }
 
-- (void)xx_event:(UIButton *)button
+#pragma mark ---UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSInteger tag = button.tag;
+    return self.dataArray.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *ID = @"resueID";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
+    }
+    cell.textLabel.text = self.dataArray[indexPath.row];
+    cell.textLabel.textAlignment = 1;
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self xx_event:indexPath.row];
+}
+
+- (UITableView *)tableView{
+    if (!_tableView) {
+        UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:0];
+        tableView.delegate = self;
+        tableView.dataSource = self;
+        tableView.tableFooterView = [[UIView alloc] init];
+        tableView.showsVerticalScrollIndicator = NO;
+        tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        _tableView = tableView;
+    }
+    return _tableView;
+}
+
+- (void)xx_event:(NSInteger)tag
+{
     if (0 == tag) {
         JHUIAlertConfig *config = [[JHUIAlertConfig alloc] init];
         config.title.text       = @"这是一个很长的提示";
@@ -183,7 +205,7 @@
     }else if (10 == tag){
         JHUIAlertConfig *config = [[JHUIAlertConfig alloc] init];
         config.title.text            = @"这是一个提示";
-        config.content.text          = @"您的余额不足，需充值之后才能继续观看";
+        config.content.text          = @"您的余额不足，需充值之后才能继续观看，需充值之后才能继续观看，需充值之后才能继续观看，需充值之后才能继续观看";
         
         JHUIAlertButtonConfig *btnconfig1 = [JHUIAlertButtonConfig configWithTitle:@"取消" color:nil font:nil image:nil handle:^{
             NSLog(@"click1");
@@ -207,14 +229,14 @@
     }else if (tag == 11){
         JHUIAlertConfig *config = [[JHUIAlertConfig alloc] init];
         
-#if 0
+#if 1
         config.title.text       = @"添加自定义视图";
         config.title.bottomPadding = 100; // set bottomPadding to keep enough height
         config.dismissWhenTapOut   = NO;
         
 #else
         // when you want a fully custom view, you should use 'contentViewHeight'
-        config.contentViewHeight = 200;
+        config.contentViewHeight = 300;
 #endif
         
         JHUIAlertView *alertView = [[JHUIAlertView alloc] initWithConfig:config];
@@ -243,6 +265,18 @@
         }];
         
         [self.view addSubview:alertView];
+    }else if (tag == 12) {
+        JHUIAlertConfig *config = [[JHUIAlertConfig alloc] init];
+        config.title.text = @"生命游戏";
+        config.content.maxHeight = [UIScreen mainScreen].bounds.size.width - 80;
+        config.content.text = @"生命游戏(Game of Life)没有游戏玩家各方之间的竞争，也谈不上输赢，可以把它归类为仿真游戏。事实上，也是因为它模拟和显示的图像看起来颇似生命的出生和繁衍过程而得名为“生命游戏”。在游戏进行中，杂乱无序的细胞会逐渐演化出各种精致、有形的结构；这些结构往往有很好的对称性，而且每一代都在变化形状。一些形状一经锁定就不会逐代变化。有时，一些已经成形的结构会因为一些无序细胞的“入侵”而被破坏。但是形状和秩序经常能从杂乱中产生出来。";
+        
+        JHUIAlertButtonConfig *btnconfig1 = [JHUIAlertButtonConfig configWithTitle:@"确定" color:nil font:nil image:nil handle:^{
+            NSLog(@"click1");
+        }];
+        config.buttons = @[btnconfig1];
+        JHUIAlertView *alert = [[JHUIAlertView alloc] initWithConfig:config];
+        [self.view addSubview:alert];
     }
 }
 

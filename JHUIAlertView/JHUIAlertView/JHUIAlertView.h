@@ -125,7 +125,8 @@ typedef void(^JHUIAlertViewAddCustomViewBlock)(JHUIAlertView *alertView, CGRect 
 @property (nonatomic,  assign) BOOL              dismissWhenTapOut;
 /// Button height
 @property (nonatomic,  assign) CGFloat           buttonHeight;
-
+/// Default is (90, 30, 90, 30). to limit contentView's max width and max height.
+@property (nonatomic,  assign) UIEdgeInsets      contentViewMargin;
 @end
 
 @interface JHUIAlertTextConfig : NSObject

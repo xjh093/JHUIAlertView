@@ -34,6 +34,7 @@
 @property (strong,  nonatomic) JHUIAlertConfig      *config;
 @property (nonatomic,  assign) NSInteger  rotation;
 @property (nonatomic,  assign) CGFloat  contentViewHeight;
+@property (nonatomic,  assign) CGFloat  contentLabelHeight;
 
 @property (nonatomic,  strong) UIView *titleView;
 @property (nonatomic,  strong) UIView *middleView;
@@ -119,13 +120,16 @@
 - (void)jhSetupViews:(CGRect)frame
 {
     
-    if (_config.blackViewAlpha < 0 || _config.blackViewAlpha >0.8) {
+    if (_config.blackViewAlpha < 0 || _config.blackViewAlpha > 0.8) {
         _config.blackViewAlpha = 0.5;
     }
-    if (_config.contentViewWidth <= 0 ||
-        _config.contentViewWidth > [UIScreen mainScreen].bounds.size.width) {
-        _config.contentViewWidth = [UIScreen mainScreen].bounds.size.width - 100;
+
+    CGSize size = [UIScreen mainScreen].bounds.size;
+    CGFloat maxW = MIN(size.width, size.height);
+    if (_config.contentViewWidth <= 0 || _config.contentViewWidth > maxW - 100) {
+        _config.contentViewWidth = maxW - 100;
     }
+    
     if (_config.contentViewCornerRadius < 0) {
         _config.contentViewCornerRadius = 10;
     }
@@ -222,6 +226,7 @@
         contentLabel.frame = sframe;
         contentLabel.numberOfLines = _config.content.autoHeight ? 0 : 1;
         _contentLabel = contentLabel;
+        _contentLabelHeight = CGRectGetHeight(sframe);
         
         CGFloat maxY = CGRectGetMaxY(scrollView.frame) + _config.content.bottomPadding;
         if (_config.content.maxHeight > 0 && CGRectGetHeight(sframe) > _config.content.maxHeight) {
@@ -324,12 +329,15 @@
     }
     
     _contentViewHeight = contentViewH;
+    contentView.frame = CGRectMake(0,0,_config.contentViewWidth,_contentViewHeight);
     
-    if (_contentViewHeight > [UIScreen mainScreen].bounds.size.height - 100) {
-        _contentViewHeight = [UIScreen mainScreen].bounds.size.height - 100;
+    CGFloat offsetY = _config.contentViewMargin.top + _config.contentViewMargin.bottom;
+    if (size.width > size.height) {
+        offsetY = _config.contentViewMargin.left + _config.contentViewMargin.right;
+    }
+    if (_contentViewHeight > size.height - offsetY) {
+        _contentViewHeight = size.height - offsetY;
         [self setupMiddleViewHeight:_contentViewHeight];
-    }else{
-        contentView.frame = CGRectMake(0,0,_config.contentViewWidth,_contentViewHeight);
     }
 }
 
@@ -461,6 +469,15 @@
         _rotation = 2;
         
         newH = _contentViewHeight;
+        CGSize size = [UIScreen mainScreen].bounds.size;
+        CGFloat maxH = size.height - _config.contentViewMargin.top - _config.contentViewMargin.bottom;
+        if (_contentLabelHeight > newH) {
+            if (_contentLabelHeight < maxH) {
+                newH = _contentLabelHeight + _config.content.topPadding + _config.content.bottomPadding;
+            }else{
+                newH = maxH;
+            }
+        }
         [self setupMiddleViewHeight:newH];
     }
     
@@ -557,6 +574,7 @@
         _contentViewCornerRadius = 10;
         _dismissWhenTapOut = YES;
         _buttonHeight = 40;
+        _contentViewMargin = UIEdgeInsetsMake(90, 30, 90, 30);
     }
     return self;
 }

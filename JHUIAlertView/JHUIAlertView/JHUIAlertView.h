@@ -27,6 +27,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 
+// v1.2.2 (2021-09-09 16:25:12)
 #import <UIKit/UIKit.h>
 
 @class JHUIAlertView,JHUIAlertConfig,JHUIAlertTextConfig,JHUIAlertButtonConfig;
